@@ -16,6 +16,10 @@ NSNumber !=> int float double bool<br>
 NSNumber 只描述有效位数取值时可以可根据需要取任意类型需要什么类型就用方法去取<br>
 类方法 self 有具体地址<br>
 实例方法 self: 类名 super: 父类<br>
+***
+便利构造法:
+ + (classname *)classNameWith参数
+***
 #封装 、 继承、 动态面向对象的特征<br>
 ##封装
 将数据或函数等集合在一个个单元中
@@ -56,6 +60,26 @@ const:变量只读值不能修改<br>
     return _stuId;
 }
 ```
+***
+使用NSNumberFormatter对NSNumber与NSString转化
+```
+		 
+		 NSNumber *floatNumber = [NSNumber numberWithFloat:100.0500];
+         NSLog(@"number = %@", floatNumber);
+         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+         [formatter setNumberStyle:NSNumberFormatterNoStyle];
+                      //设置数字格式  无格式、short、long格式
+         NSString *numberString = [formatter stringFromNumber:floatNumber];
+         NSLog(@"number string = %@", numberString);
+***
+#NSValue  NSNumber
+NSValue 可以把简单的复杂的数据类型封装为对象 
+
+		NSValue *pointValue = [NSValue valueWithPoint:NSMakePoint(10, 10)];
+        NSValue *sizeValue  = [NSValue valueWithSize:NSMakeSize(20, 20)];
+        NSValue *rectValue  = [NSValue valueWithRect:NSMakeRect(0, 0, 20, 20)];
+         
+         NSNumber *floatNumber = [NSNumber numberWithFloat:100.0500]       
 #NSDate AND NSTimer
 ##NSTimer
 scheduledTimerWithTimeInterval:(NSTimeInterval)seconds  
@@ -136,8 +160,62 @@ repeats:(BOOL)yesOrNo
 	//    NSMutableString *string12 = [NSString stringWithFormat:@"12"];//错误
 	//    NSMutableString *string12 = [string4 substringFromIndex:1];//错误
 	//    NSMutableString *string12 = [NSMutableString stringWithFormat:@"%@",[string4 substringFromIndex:1]];
-	```
+***	
+			NSNumericSearch: 比较字符串长度
+         // NSCaseInsensitiveSearch: 大小写不敏感比较
+         // NSLiteralSearch: 完全比较，比较大小写
+         NSComparisonResult result = [string1 compare:string2 options:NSNumericSearch | NSCaseInsensitiveSearch];
+
+***
+
 #NSArray
 
 Oc集合类只能接受对象<br>
+[NSArray array]可简写为@[]<br>
+[NSAarray arrarwithObject : a] 可简写为:@[a]<br>
 
+[NSDictionary dictionary]可简写为@{}<br>
+[NSDictionary dictionaryWithObject:o1 forKey:k1】 可简写为@{k1:o1, k2:o2}<br>
+
+sortedArrayUsingSelector:@selector(compare:)];//选择器排序<br>
+sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2)<br>
+NSOrderDescending/递减Ascending/递增
+***
+NSARRAY怎么直接打印数组打印中文字符<br>
+1)添加类NSArray+Log <br>
+2)重写 - (NSString *)descriptionWithLocale:(id)locale<br>
+```oc
+		
+		@implementation NSArray (Log)(log不可改)
+		- (NSString *)descriptionWithLocale:(id)locale {
+		    NSMutableString *str = [NSMutableString stringWithFormat:@"%lu (\n",(unsigned long)[self count]];
+		    for (id obj in self)
+		    {
+		        [str appendFormat:@"\t%@, \n", obj];
+		    }
+		    [str appendString:@")"];
+		    return str;
+		}
+		@end
+```
+- (NSString *)descriptionWithLocale:(id)locale
+{
+    NSMutableString *strM = [NSMutableString string];
+    [strM appendString:@"(\n"];
+   
+    for (id obj in self) {
+        [strM appendFormat:@"\t%@,\n", obj];
+    }
+    [strM appendString:@")"];
+
+    return strM;
+}
+***
+#内存
+内存：程序运行中临时分配的存储空间在程序结束后释放。<br>
+内存管理：软件运行时对计算机内存资源进行分配和使用的技术。快速高效<br>
+reatinCount 计数器<br>
+deaalloc : 当对象被释放时才会调用<br>
+alloc
+retain
+release
