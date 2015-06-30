@@ -80,8 +80,32 @@ NSValue 可以把简单的复杂的数据类型封装为对象
         NSValue *rectValue  = [NSValue valueWithRect:NSMakeRect(0, 0, 20, 20)];
          
          NSNumber *floatNumber = [NSNumber numberWithFloat:100.0500]       
+
 #NSDate AND NSTimer
+##NSDate 
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat : @"yyyyMMdd"];//设置格式
+    //也可以设置时区
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
+    输出即会按照格式输出
 ##NSTimer
+
+      
+      TImer * timer = [[TImer alloc]init];
+      [timer timer];
+      [[NSRunLoop currentRunLoop]run];
+      -(void)timerInfo
+	{
+	    _seconds++;
+	    NSString * string = [NSString stringWithFormat:@"%.2d:%.2d:%.2d", _seconds / 3600, (_seconds / 60) % 60, _seconds % 60];
+	    
+	    NSLog(@"%@",string);
+	    
+	}
+	-(void)timer
+	{
+	    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerInfo) userInfo:nil repeats:YES];
+	}
 scheduledTimerWithTimeInterval:(NSTimeInterval)seconds  
 预订一个Timer,设置一个时间间隔。
 
@@ -98,6 +122,7 @@ userInfo:(id)userInfo
 
 repeats:(BOOL)yesOrNo
 当YES时，定时器会不断循环直至失效或被释放，当NO时，定时器会循环发送一次就失效。
+
 #NSNumber 
 对简单的数据进行封装和解封
 ##Nsstring
@@ -181,7 +206,8 @@ sortedArrayUsingSelector:@selector(compare:)];//选择器排序<br>
 sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2)<br>
 NSOrderDescending/递减Ascending/递增
 ***
-NSARRAY怎么直接打印数组打印中文字符<br>
+
+##NSARRAY怎么直接打印数组打印中文字符<br>
 1)添加类NSArray+Log <br>
 2)重写 - (NSString *)descriptionWithLocale:(id)locale<br>
 ```oc
@@ -210,8 +236,12 @@ NSARRAY怎么直接打印数组打印中文字符<br>
 
     return strM;
 }
-***
+```
+
+
+
 #内存
+```
 内存：程序运行中临时分配的存储空间在程序结束后释放。<br>
 内存管理：软件运行时对计算机内存资源进行分配和使用的技术。快速高效<br>
 reatinCount 计数器<br>
@@ -219,3 +249,37 @@ deaalloc : 当对象被释放时才会调用<br>
 alloc
 retain
 release
+```
+
+#属性
+##
+@property (nonatomic , strong, readwrite) (参数类型) 参数名 <br>
+
+
+***
+属性关键字:
+***
+线程相关的:
+nonatomic 非原子性操作:不是很安全其他线程可以改变其值 效率高<br>
+
+生成setter相关的br>
+readwrite : setter 和getter都生成br>0
+readonly :只读<br>
+@property (nonatomic , strong, setName :) (参数类型) 参数名 <br>
+对setter方法重命名 加 : (其有参数)getter不加
+setter = setName setter重命名<br>
+getter = isGetter getter重命名<br>
+
+内存相关的：<br>
+strong：强引用 对象默认类型<br>
+retain：引用计数+1 strong 相当于 retain<br>
+copy：<br>
+浅拷贝：指针拷贝不会开辟新的空间---->不可变对象拷贝<br>
+深拷贝：拷贝值开辟新的空间--->可变对象拷贝<br>
+assign：一般修饰基本数据类型， 引用计数不会改变 基础数据类型<br>
+weak:若引用ARC模式 循环引用才会用到 weak相当于assign但比assign多了一个功能即对象消失后自动把指针变成nil<br>
+*******************
+NSString 用copy delegete(授权代表)用assign 基本数据类型用assign 对象类型用retain
+*******************
+***
+[button3 setText:[button3 text]] 等同于 button3.text = button3.text;
